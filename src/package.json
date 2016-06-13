@@ -10,7 +10,8 @@
     "express-session": "^1.13.0",
     "mongodb": "^2.1.14",
     "mongoose": "^4.4.20",
-    "node-controlor": "^1.0.0"
+    "node-controlor": "^1.0.0",
+    "webpack": "^1.13.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

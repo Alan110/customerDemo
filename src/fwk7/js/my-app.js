@@ -1,68 +1,4 @@
-// Initialize your app
-var myApp = new Framework7({
-    precompileTemplates: true
-});
-
-// Export selectors engine
-var $$ = Dom7;
-var mySite = 'http://127.0.0.1:8888/';
-
-function getData(query, data) {
-    return new Promise(function (resolve, reject) {
-        $$.ajax({
-            url: mySite + query,
-            data: data,
-            dataType: "json",
-            crossDomain: true,
-            success: function (res) {
-                if (res.data) {
-                    resolve(res);
-                } else {
-                    reject("no-data");
-                }
-            }
-        })
-    });
-}
-
-function getRole() {
-    return new Promise(function (resolve, reject) {
-        $$.ajax({
-            url: mySite + "getRole",
-            dataType: "json",
-            crossDomain: true,
-            success: function (res) {
-                console.log(res);
-                if (res) {
-                    if(res.status == "redirect"){
-                        location.href = "login.html";
-                    }
-                    resolve(res.user.role);
-                } else {
-                    reject("no-data");
-                }
-            }
-        })
-    });
-}
-
-function toDo(query, data) {
-    return new Promise(function (resolve, reject) {
-        $$.ajax({
-            url: mySite + query,
-            data: data,
-            dataType: "json",
-            crossDomain: true,
-            success: function (res) {
-                if (res.status === "ok") {
-                    resolve(res);
-                } else {
-                    reject("fail");
-                }
-            }
-        })
-    });
-}
+var myApp = A.myApp;
 
 function leftPanel() {
     var $index = $$(".view-main");
@@ -102,13 +38,14 @@ function changeView(role) {
 function init(role) {
     changeView(role);
     leftPanel();
-    __inline('view-index.js');
-    __inline('view-linker.js');
-    __inline('view-product.js');
-    __inline('view-order.js');
-    __inline('view-user.js');
+    require('./view-index.js');
+    require('./xxx/view-linker.js');
+    //__inline('view-linker.js');
+    //__inline('view-product.js');
+    //__inline('view-order.js');
+    //__inline('view-user.js');
 }
 
 
-getRole().then(init);
+A.getRole().then(init);
 

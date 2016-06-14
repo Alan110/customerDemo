@@ -11,6 +11,12 @@ module.exports = {
         filename : "[name].js"
     },
 
+	module: {
+        loaders: [
+            { test: /\.tpl$/, loader: "raw" },
+        ]
+    },
+
     externals : {
         $$ : 'Dom7'
     },

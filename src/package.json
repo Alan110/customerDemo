@@ -11,6 +11,7 @@
     "mongodb": "^2.1.14",
     "mongoose": "^4.4.20",
     "node-controlor": "^1.0.0",
+    "raw-loader": "^0.5.1",
     "webpack": "^1.13.1"
   },
   "scripts": {

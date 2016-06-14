@@ -39,7 +39,6 @@ function init(role) {
     changeView(role);
     leftPanel();
     require('./view-index.js');
-    require('./xxx/view-linker.js');
     //__inline('view-linker.js');
     //__inline('view-product.js');
     //__inline('view-order.js');

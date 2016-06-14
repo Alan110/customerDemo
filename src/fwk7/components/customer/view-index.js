@@ -7,14 +7,14 @@ var mainView = myApp.addView('.view-main', {
 // Callbacks to run specific code for specific pages, for example for About page:
 myApp.onPageInit('index', function(page) {
     // run createContentPage func after link was clicked
-    getData("allCustomers")
+    A.getData("allCustomers")
         .then(function(data) {
             //渲染customer-list页
             $$("#l-customer-list").html(Template7.templates.tCustomerList(data));
             $$("#l-loading-wrapper").remove();
             //点击进入info页
             $$("#l-customer-list").on("click", "li", function() {
-                getData("getCustomerInfo", {
+                A.getData("getCustomerInfo", {
                     _id: $$(this).data("id")
                 }).then(function(data) {
                     console.log(data);
@@ -32,7 +32,7 @@ myApp.onPageInit('index', function(page) {
                 var li = $$(this).parent().parent();
                 myApp.confirm('您确定删除吗?', '删除该用户',
                     function() {
-                        toDo("removeCustomer", {
+                        A.toDo("removeCustomer", {
                             _id: li.data("id")
                         }).then(function() {
                             myApp.swipeoutDelete(li);
@@ -51,7 +51,7 @@ myApp.onPageInit('index', function(page) {
 
             //添加用户
             $$("#l-add-customer").on("click", function() {
-                getData("getAllLinkerNames").then(function(data){
+                A.getData("getAllLinkerNames").then(function(data){
                     data.data[0] = {title:"添加用户"};
                     mainView.router.loadContent(Template7.templates.tCustomerInfo(data));
                 });

@@ -38,11 +38,11 @@ function changeView(role) {
 function init(role) {
     changeView(role);
     leftPanel();
-    require('./view-index.js');
+    require('./components/customer/view-index.js');
     //__inline('view-linker.js');
     //__inline('view-product.js');
     //__inline('view-order.js');
-    //__inline('view-user.js');
+    require('./components/user/view-user.js');
 }
 
 

@@ -1,3 +1,5 @@
+A.templates.tUserInfo = Template7.compile(require('./tUserInfo.tpl'));
+var myApp = A.myApp;
 var userView = myApp.addView('.view-user', {
     // Because we use fixed-through navbar we can enable dynamic navbar
     dynamicNavbar: true
@@ -5,20 +7,20 @@ var userView = myApp.addView('.view-user', {
 
 myApp.onPageInit('user-index', function(page) {
     // run createContentPage func after link was clicked
-    getData("allUser")
+    A.getData("allUser")
         .then(function(data) {
             //渲染customer-list页
-            $$("#l-user-list").html(Template7.templates.tCustomerList(data));
+            $$("#l-user-list").html(A.templates.tCustomerList(data));
             $$("#l-loading-wrapper-user").remove();
             //点击进入info页
             $$("#l-user-list").on("click", "li", function() {
-                getData("getUserInfo", {
+                A.getData("getUserInfo", {
                     _id: $$(this).data("id")
                 }).then(function(data) {
                     console.log(data);
                     data.data[0]['title'] = '用户详情';
                     data.data[0]['userRole'] = role;
-                    userView.router.loadContent(Template7.templates.tUserInfo(data));
+                    userView.router.loadContent(A.templates.tUserInfo(data));
                 }, function(res) {
                     if (res == "no-data") {
                         console.warn(res);
@@ -31,7 +33,7 @@ myApp.onPageInit('user-index', function(page) {
                 var li = $$(this).parent().parent();
                 myApp.confirm('您确定删除吗?', '删除该用户',
                     function() {
-                        toDo("removeUser", {
+                        A.toDo("removeUser", {
                             _id: li.data("id")
                         }).then(function() {
                             myApp.swipeoutDelete(li);

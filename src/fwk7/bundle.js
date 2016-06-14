@@ -85,11 +85,10 @@
 	    changeView(role);
 	    leftPanel();
 	    __webpack_require__(2);
-	    __webpack_require__(3);
 	    //__inline('view-linker.js');
 	    //__inline('view-product.js');
 	    //__inline('view-order.js');
-	    //__inline('view-user.js');
+	    __webpack_require__(3);
 	}
 
 
@@ -170,6 +169,7 @@
 	    myApp : myApp,
 	    getData : getData,
 	    toDo : toDo,
+	    templates : {},
 	    getRole : getRole
 	}
 
@@ -187,14 +187,14 @@
 	// Callbacks to run specific code for specific pages, for example for About page:
 	myApp.onPageInit('index', function(page) {
 	    // run createContentPage func after link was clicked
-	    getData("allCustomers")
+	    A.getData("allCustomers")
 	        .then(function(data) {
 	            //渲染customer-list页
 	            $$("#l-customer-list").html(Template7.templates.tCustomerList(data));
 	            $$("#l-loading-wrapper").remove();
 	            //点击进入info页
 	            $$("#l-customer-list").on("click", "li", function() {
-	                getData("getCustomerInfo", {
+	                A.getData("getCustomerInfo", {
 	                    _id: $$(this).data("id")
 	                }).then(function(data) {
 	                    console.log(data);
@@ -212,7 +212,7 @@
 	                var li = $$(this).parent().parent();
 	                myApp.confirm('您确定删除吗?', '删除该用户',
 	                    function() {
-	                        toDo("removeCustomer", {
+	                        A.toDo("removeCustomer", {
 	                            _id: li.data("id")
 	                        }).then(function() {
 	                            myApp.swipeoutDelete(li);
@@ -231,7 +231,7 @@
 
 	            //添加用户
 	            $$("#l-add-customer").on("click", function() {
-	                getData("getAllLinkerNames").then(function(data){
+	                A.getData("getAllLinkerNames").then(function(data){
 	                    data.data[0] = {title:"添加用户"};
 	                    mainView.router.loadContent(Template7.templates.tCustomerInfo(data));
 	                });
@@ -282,28 +282,29 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(A) {
-	var myapp = A.myApp;
-	var linkerView = myApp.addView('.view-linkman', {
+	/* WEBPACK VAR INJECTION */(function(A) {A.templates.tUserInfo = Template7.compile(__webpack_require__(4));
+	var myApp = A.myApp;
+	var userView = myApp.addView('.view-user', {
 	    // Because we use fixed-through navbar we can enable dynamic navbar
 	    dynamicNavbar: true
 	});
 
-	myApp.onPageInit('link-index', function(page) {
+	myApp.onPageInit('user-index', function(page) {
 	    // run createContentPage func after link was clicked
-	    getData("allLinkman")
+	    A.getData("allUser")
 	        .then(function(data) {
 	            //渲染customer-list页
-	            $$("#l-link-list").html(Template7.templates.tCustomerList(data));
-	            $$("#l-loading-wrapper").remove();
+	            $$("#l-user-list").html(A.templates.tCustomerList(data));
+	            $$("#l-loading-wrapper-user").remove();
 	            //点击进入info页
-	            $$("#l-link-list").on("click", "li", function() {
-	                getData("getLinkmanInfo", {
+	            $$("#l-user-list").on("click", "li", function() {
+	                A.getData("getUserInfo", {
 	                    _id: $$(this).data("id")
 	                }).then(function(data) {
 	                    console.log(data);
-	                    data.data[0]['title'] = '联系人详情';
-	                    linkerView.router.loadContent(Template7.templates.tLinkerInfo(data));
+	                    data.data[0]['title'] = '用户详情';
+	                    data.data[0]['userRole'] = role;
+	                    userView.router.loadContent(A.templates.tUserInfo(data));
 	                }, function(res) {
 	                    if (res == "no-data") {
 	                        console.warn(res);
@@ -312,11 +313,11 @@
 	            });
 
 	            // 点击删除,禁止冒泡,只用js api 删除,否则会触发li的点击
-	            $$("#l-link-list .swipeout-delete").on("click", function(e) {
+	            $$("#l-user-list .swipeout-delete").on("click", function(e) {
 	                var li = $$(this).parent().parent();
 	                myApp.confirm('您确定删除吗?', '删除该用户',
 	                    function() {
-	                        toDo("removeLinkman", {
+	                        A.toDo("removeUser", {
 	                            _id: li.data("id")
 	                        }).then(function() {
 	                            myApp.swipeoutDelete(li);
@@ -333,46 +334,45 @@
 	                return false;
 	            })
 
-	            //添加linker
-	            $$("#l-add-link").on("click", function() {
-	                var _id = $$("#customer-info").find("._id").val();
-	                getData("getAllCustomerNames", {_id : _id})
-	                .then(function(data) {
-	                    console.log(data);
-	                    data.data[0]['title'] = '添加联系人';
-	                    linkerView.router.loadContent(Template7.templates.tLinkerInfo(data));
-	                }, function(res) {
-	                    if (res == "no-data") {
-	                        console.warn(res);
-	                    }
-	                });
-	                
+	            //添加user
+	            $$("#l-add-user").on("click", function() {
+	                var data = {
+	                    data: [{
+	                        "title": '添加用户',
+	                        "userRole" : role
+	                    }]
+	                };
+	                userView.router.loadContent(Template7.templates.tUserInfo(data));
 	            });
 
 	        });
 	}).trigger();
 
 
-	myApp.onPageInit('linker-info', function(page) {
-	    $$('#l-add-saveLinker').on('click', function(e) {
+	myApp.onPageInit('user-info', function(page) {
+	    $$('#l-add-saveUser').on('click', function(e) {
 	        var $self = $$(this);
-	        setTimeout(function(){
+	        setTimeout(function() {
 	            page.view.router.refreshPreviousPage()
-	            $self.val("提交中...").attr("disabled","disabled");
-	        },0);
-	        setTimeout(function(){
+	            $self.val("提交中...").attr("disabled", "disabled");
+	        }, 0);
+	        setTimeout(function() {
 	            $self.val("提交成功");
-	        },300);
-	        setTimeout(function(){
+	        }, 300);
+	        setTimeout(function() {
 	            page.view.router.back();
-	        },600);
+	        }, 600);
 	    });
 
 	});
 
-
-
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = "        <div class=\"navbar\">\n          <div class=\"navbar-inner\">\n            <div class=\"left\"><a href=\"#\" class=\"link back\"> <i class=\"icon icon-back\"></i><span>Back</span></a></div>\n            <div class=\"center sliding\">{{data[0].title}}</div>\n            <div class=\"right\">\n              <!-- Right link contains only icon - additional \"icon-only\" class--><a href=\"#\" class=\"link icon-only open-panel\"> <i class=\"icon icon-bars\"></i></a>\n            </div>\n          </div>\n        </div>\n        <div class=\"pages\">\n          <!-- Page, data-page contains page name-->\n          <div data-page=\"user-info\" class=\"page\" id=\"user-info\">\n            <!-- Scrollable page content-->\n            <div class=\"page-content\">\n                <div class=\"list-block\">\n                    <form action=\"/saveUser\" method=\"post\" enctype=\"x-www-form-urlencoded\" class=\"ajax-submit\">\n                      <input type=\"hidden\" class=\"_id\" name=\"_id\" value=\"{{data[0]._id}}\">\n                      <ul>\n                        <!-- Text inputs -->            \n                        <li>\n                          <div class=\"item-content\">\n                            <div class=\"item-inner\">\n                              <div class=\"item-title label\">用户名</div>\n                              <div class=\"item-input\">\n                                <input type=\"text\" name=\"name\" value=\"{{data[0].name}}\" placeholder=\"Name\">\n                              </div>\n                            </div>\n                          </div>\n                        </li>\n                        <li>\n                          <div class=\"item-content\">\n                            <div class=\"item-inner\">\n                              <div class=\"item-title label\">密码</div>\n                              <div class=\"item-input\">\n                                <input type=\"text\" name=\"pswd\" value=\"{{data[0].pswd}}\" placeholder=\"Name\">\n                              </div>\n                            </div>\n                          </div>\n                        </li>\n\n                        <li>\n                          <div class=\"item-content\">\n                            <div class=\"item-inner\">\n                              <div class=\"item-title label\">称呼</div>\n                              <div class=\"item-input\">\n                                <input type=\"text\" name=\"call\" value=\"{{data[0].call}}\" placeholder=\"Call\">\n                              </div>\n                            </div>\n                          </div>\n                        </li>\n                        <li>\n                          <div class=\"item-content\">\n                            <div class=\"item-inner\">\n                              <div class=\"item-title label\">邮箱</div>\n                              <div class=\"item-input\">\n                                <input type=\"email\" name=\"email\" value=\"{{data[0].email}}\" placeholder=\"E-mail\">\n                              </div>\n                            </div>\n                          </div>\n                        </li>\n                        <li>\n                          <div class=\"item-content\">\n                            <div class=\"item-inner\">\n                              <div class=\"item-title label\">电话</div>\n                              <div class=\"item-input\">\n                                <input type=\"tel\" placeholder=\"phone\" value=\"{{data[0].phone}}\" name=\"phone\">\n                              </div>\n                            </div>\n                          </div>\n                        </li>\n                          <li>\n                        </li>\n                        <li data-role=\"{{data[0].role}}\" {{#js_compare \"this.data[0].userRole != '1' \"}}style=\"display:none;\"{{/js_compare}}\n>\n                          <a href=\"#\" class=\"item-link smart-select\" data-searchbar=\"true\" data-searchbar-placeholder=\"Search fruits\">\n                            <!-- select -->\n                            <select name=\"role\" value={{data[0].role}}>\n                                <option>请选择</opton>\n                                <option value=\"1\" {{#js_compare \"this.data[0].role == '1' \"}}selected=selected{{/js_compare}}>系统管理员</opton>\n                                <option value=\"2\" {{#js_compare \"this.data[0].role == '2' \"}}selected=selected{{/js_compare}}>产品管理员</opton>\n                                <option value=\"3\" {{#js_compare \"this.data[0].role == '3' \"}}selected=selected{{/js_compare}}>销售员</opton>   \n                            </select>\n                            <div class=\"item-content\">\n                              <div class=\"item-inner\">\n                                <div class=\"item-title\">用户角色</div>\n                                <div class=\"item-after\"></div>\n                              </div>\n                            </div>\n                          </a>\n                        </li>\n                        <li>\n                          <div class=\"item-content\">\n                            <div class=\"item-inner\">\n                              <div class=\"item-title label\">备注</div>\n                              <div class=\"item-input\">\n                                <textarea placeholder=\"note\"  name=\"note\">{{data[0].note}}</textarea>\n                              </div>\n                            </div>\n                          </div>\n                        </li>\n                      </ul>\n\t\t\t\t  <div class=\"content-block-title\">\n\t\t\t\t\t\t<input id=\"l-add-saveUser\" type=\"submit\" class=\"button active\" style=\"height:40px;line-height:40px;\" value=\"确定\">\n\t\t\t\t  </div>\n                  </form>\n\t\t\t\t</div>\n            </div>\n          </div>\n        </div>\n"
 
 /***/ }
 /******/ ]);

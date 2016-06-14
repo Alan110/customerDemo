@@ -66,5 +66,6 @@ module.exports = {
     myApp : myApp,
     getData : getData,
     toDo : toDo,
+    templates : {},
     getRole : getRole
 }

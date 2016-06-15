@@ -9,42 +9,49 @@ function leftPanel() {
     var $views = $$(".view");
     var $panel = $$(".panel-left");
 
-    $panel.on("click", ".l-section", function () {
+    $panel.on("click", ".l-section", function() {
         myApp.closePanel();
         var page = $$(this).data("page");
         $views.hide();
-        $$(".view[data-page=" + page + "]").show();
+        if (!A.getView(page)) {
+            require.ensure([],function(require){
+                var md = require("./components/" + page + "/index.js");
+                md.init();
+            });
+        } else {
+            $$(".view[data-page=" + page + "]").show();
+        }
     });
 }
 
 function changeView(role) {
-   if(role == 2) {
+    if (role == 2) {
         $$(".panel-left a[data-page=index]").remove();
         $$(".panel-left a[data-page=order-index]").remove();
         $$(".panel-left a[data-page=link-index]").remove();
         $$(".view[data-page=index]").hide();
         $$(".view[data-page=product-index]").show();
-   }
-   if (role != 1) {
+    }
+    if (role != 1) {
         $$("#l-add-user").remove();
-   }
-   if ( !(role == 1 || role == 2)) {
+    }
+    if (!(role == 1 || role == 2)) {
         $$(".panel-left a[data-page=product-index]").remove();
         $$(".view[data-page=product-index]").hide();
-   }
+    }
 
 }
 
 function init(role) {
     changeView(role);
     leftPanel();
-    require('./components/customer/view-index.js');
+    var customer = require('./components/customer/index.js');
+    customer.init();
     //__inline('view-linker.js');
     //__inline('view-product.js');
     //__inline('view-order.js');
-    require('./components/user/view-user.js');
+    require('./components/user/index.js');
 }
 
 
 A.getRole().then(init);
-

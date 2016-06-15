@@ -62,10 +62,19 @@ function toDo(query, data) {
     });
 }
 
+function getView(name) {
+    myapp.views.forEach(function(el,index){
+        if (el[name]) {
+           return el; 
+        }
+    });
+}
+
 module.exports = {
     myApp : myApp,
     getData : getData,
     toDo : toDo,
     templates : {},
-    getRole : getRole
+    getRole : getRole,
+    getView : getView
 }

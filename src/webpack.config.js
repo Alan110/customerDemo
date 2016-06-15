@@ -13,7 +13,11 @@ module.exports = {
 
 	module: {
         loaders: [
-            { test: /\.tpl$/, loader: "raw" },
+            { 
+                test: /\.(html)|(tpl)$/, 
+                name : "mandrillTemplates",
+                loader: "raw!html-minify"
+            } 
         ]
     },
 
@@ -24,7 +28,8 @@ module.exports = {
 
     plugins: [
 	  new webpack.ProvidePlugin({
-		"A": __dirname + "/fwk7/components/comm/A.js"
+		"A": __dirname + "/fwk7/components/comm/A.js",
+        "$$" : "$$"
 	  }) 
 //      new webpack.optimize.UglifyJsPlugin()
 	]

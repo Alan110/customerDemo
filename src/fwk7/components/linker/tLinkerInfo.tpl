@@ -1,4 +1,3 @@
-    <script id="tLinkerInfo" type="text/template7" charset="utf-8">
         <div class="navbar">
           <div class="navbar-inner">
             <div class="left"><a href="#" class="link back"> <i class="icon icon-back"></i><span>Back</span></a></div>
@@ -108,4 +107,3 @@
             </div>
           </div>
         </div>
-    </script>

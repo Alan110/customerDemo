@@ -1,4 +1,3 @@
-    <script id="tCustomerList" type="text/template7" charset="utf-8">
         <ul>
             {{#each data}}
               <li class="swipeout" data-id="{{_id}}">
@@ -13,4 +12,3 @@
              </li>
             {{/each}}
         </ul>
-    </script>

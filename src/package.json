@@ -21,6 +21,10 @@
   "author": "Alan",
   "license": "ISC",
   "devDependencies": {
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "es6-loader": "^0.2.0",
     "html-minify-loader": "^1.1.0"
   }
 }

@@ -63,7 +63,7 @@ function toDo(query, data) {
 }
 
 function getView(name) {
-    myapp.views.forEach(function(el,index){
+    myApp.views.forEach(function(el,index){
         if (el[name]) {
            return el; 
         }

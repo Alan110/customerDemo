@@ -14,9 +14,10 @@ function leftPanel() {
         var page = $$(this).data("page");
         $views.hide();
         if (!A.getView(page)) {
-            require.ensure([],function(require){
-                var md = require("./components/" + page + "/index.js");
+            require.ensure([],function(){
+                var md = require("./components/" + page.split("-")[0] + "/index.js");
                 md.init();
+                $$(".view[data-page=" + page + "]").show();
             });
         } else {
             $$(".view[data-page=" + page + "]").show();
@@ -47,10 +48,13 @@ function init(role) {
     leftPanel();
     var customer = require('./components/customer/index.js');
     customer.init();
+    var name = 'alan';
+    var tpl = `<li>${name}</li>`;
+    console.log(tpl);
     //__inline('view-linker.js');
     //__inline('view-product.js');
     //__inline('view-order.js');
-    require('./components/user/index.js');
+//    require('./components/user/index.js');
 }
 
 

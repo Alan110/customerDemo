@@ -15,7 +15,7 @@ function leftPanel() {
         $views.hide();
         if (!A.getView(page)) {
             require.ensure([],function(){
-                var md = require("./components/" + page.split("-")[0] + "/index.js");
+                var md = require("./components/indexxxxx.js");
                 md.init();
                 $$(".view[data-page=" + page + "]").show();
             });
